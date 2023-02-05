@@ -38,7 +38,7 @@ vvt <- function(v) {
 # Simulate data
 ###############
 
-periods = 100
+periods = 100  # 
 n = 500
 ldim = 2
 mean_density = -6.5
@@ -68,9 +68,8 @@ for(period in 2:periods) {
 }
 
 mean_func = lapply(1:periods, function(p) rep(mu[[p]], times = n*n) + rep(alpha[[p]], times = n) + rep(beta[[p]], each = n) + as.numeric(u[[p]] %*% t(v[[p]])))
-y = lapply(mean_func, function(mf) rbinom(n*n, 1, expit(mf)))
 
-save(y,mean_func,file="data/simulation_logit_data.RData")
+save(y,mean_func,file="/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_data.RData")
 
 
 
@@ -310,9 +309,9 @@ for(period in 1:periods) {
                  f = f)
   
   # For sample_prop_0 = 1  (used in simulation_plots.R)
-  save(results, file = paste("data/simulation_logit_p",period,".RData",sep=""))
+  save(results, file = paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_p",period,".RData",sep=""))
 
   # For sample_prop_0 = 0.025 (used in simulation_plots.R)
-  #save(results, file = paste("data/simulation_logit_cc_p",period,".RData",sep=""))
+  save(results, file = paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_cc_p",period,".RData",sep=""))
   
 }
