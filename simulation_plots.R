@@ -1,6 +1,9 @@
+#install.packages("pROC")
 library(pROC)
 
-load("data/simulation_logit_data.RData")
+load("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_data.RData")
+expit <- function(x) {y = exp(x); y/(1+y)}
+n = 500
 
 periods = 100
 ll = lapply(1:periods, function(p) sum(y[[p]]*log(expit(mean_func[[p]])) + (1-y[[p]])*log(1-expit(mean_func[[p]]))))
@@ -16,20 +19,20 @@ corr_never_full <- list()
 corr_never_cc <- list()
 
 for(t in 1:periods) {
-  load(paste("data/simulation_logit_p",t,".RData",sep=""))
+  load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_p",t,".RData",sep=""))
   results_full = results
   mf_full = rep(results_full$mu_mean, times = n*n) + rep(results_full$alpha_mean, times = n) + rep(results_full$beta_mean, each = n) + as.numeric(results_full$u_mean %*% t(results_full$v_mean))
   
-  load(paste("data/simulation_logit_cc_p",t,".RData",sep=""))
+  load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_cc_p",t,".RData",sep=""))
   results_cc = results
   mf_cc = rep(results_cc$mu_mean+log(0.025), times = n*n) + rep(results_cc$alpha_mean, times = n) + rep(results_cc$beta_mean, each = n) + as.numeric(results_cc$u_mean %*% t(results_cc$v_mean))
   
   corr_cc[[t]] = cor(mean_func[[t]],mf_cc,method = c("pearson"))
   corr_full[[t]] = cor(mean_func[[t]],mf_full,method = c("pearson"))
   
-  corr_never_cc[[t]] = cor(mean_func[[t]][never_y],mf_cc[never_y],method = c("pearson"))
-  corr_never_full[[t]] = cor(mean_func[[t]][never_y],mf_full[never_y],method = c("pearson"))
-}
+  corr_never_cc[[t]] = cor(mean_func[[t]][y],mf_cc[y],method = c("pearson"))
+  corr_never_full[[t]] = cor(mean_func[[t]][y],mf_full[y],method = c("pearson"))
+}  
 
 
 
@@ -74,11 +77,11 @@ pdf("scatter_corr.pdf",8,9)
 par(mfrow = c(3,2), mar = c(4.1,4.1,1.1,1.1))
 
 t = 10
-load(paste("data/simulation_logit_p",t,".RData",sep=""))
+load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_p",t,".RData",sep=""))
 results_full = results
 mf_full = rep(results_full$mu_mean, times = n*n) + rep(results_full$alpha_mean, times = n) + rep(results_full$beta_mean, each = n) + as.numeric(results_full$u_mean %*% t(results_full$v_mean))
 
-load(paste("data/simulation_logit_cc_p",t,".RData",sep=""))
+load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_cc_p",t,".RData",sep=""))
 results_cc = results
 mf_cc = rep(results_cc$mu_mean+log(0.025), times = n*n) + rep(results_cc$alpha_mean, times = n) + rep(results_cc$beta_mean, each = n) + as.numeric(results_cc$u_mean %*% t(results_cc$v_mean))
 
@@ -88,11 +91,11 @@ plot(mean_func[[t]],mf_cc, col = rgb(0.5,0.5,0.5,alpha=0.1), ylab = "CC EP", xla
 abline(a = 0, b = 1, lwd = 2)
 
 t = 25
-load(paste("data/simulation_logit_p",t,".RData",sep=""))
+load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_p",t,".RData",sep=""))
 results_full = results
 mf_full = rep(results_full$mu_mean, times = n*n) + rep(results_full$alpha_mean, times = n) + rep(results_full$beta_mean, each = n) + as.numeric(results_full$u_mean %*% t(results_full$v_mean))
 
-load(paste("data/simulation_logit_cc_p",t,".RData",sep=""))
+load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_cc_p",t,".RData",sep=""))
 results_cc = results
 mf_cc = rep(results_cc$mu_mean+log(0.025), times = n*n) + rep(results_cc$alpha_mean, times = n) + rep(results_cc$beta_mean, each = n) + as.numeric(results_cc$u_mean %*% t(results_cc$v_mean))
 
@@ -102,11 +105,11 @@ plot(mean_func[[t]],mf_cc, col = rgb(0.5,0.5,0.5,alpha=0.1), ylab = "CC EP", xla
 abline(a = 0, b = 1, lwd = 2)
 
 t = 100
-load(paste("data/simulation_logit_p",t,".RData",sep=""))
+load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_p",t,".RData",sep=""))
 results_full = results
 mf_full = rep(results_full$mu_mean, times = n*n) + rep(results_full$alpha_mean, times = n) + rep(results_full$beta_mean, each = n) + as.numeric(results_full$u_mean %*% t(results_full$v_mean))
 
-load(paste("data/simulation_logit_cc_p",t,".RData",sep=""))
+load(paste("/home/shkim/testfolder/replicate-latent-space-networks-anomaly-det/data/simulation_logit_cc_p",t,".RData",sep=""))
 results_cc = results
 mf_cc = rep(results_cc$mu_mean+log(0.025), times = n*n) + rep(results_cc$alpha_mean, times = n) + rep(results_cc$beta_mean, each = n) + as.numeric(results_cc$u_mean %*% t(results_cc$v_mean))
 
